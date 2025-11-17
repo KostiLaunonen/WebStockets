@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@expo/metro-runtime": "^6.1.2",
     "axios": "^1.13.2",
     "expo": "~54.0.23",
@@ -19,6 +20,12 @@
     "react-native": "0.81.5",
     "react-native-dotenv": "^3.4.11",
     "react-native-web": "^0.21.2"
+=======
+    "expo": "~54.0.23",
+    "expo-status-bar": "~3.0.8",
+    "react": "19.1.0",
+    "react-native": "0.81.5"
+>>>>>>> dde0bd6ac341521fb91d46071ce7030374c0ba1e
   },
   "private": true
 }
