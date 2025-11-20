@@ -1,10 +1,11 @@
-const axios = require('axios');
-const backendUrl = process.env.BACKEND_IP; // Fix this later
+import axios from 'axios';
+//import { backendUrl } from './config';
+const backendUrl = "localhost:3000";
 const socket = new WebSocket(`ws://${backendUrl}`);
 
 export async function fetchPrices() {
     // Import the subscription array from backend
-    const res = await axios.get('http://localhost:3000/subscriptions');
+    const res = await axios.get(`http://localhost:3000/subscriptions`);
     const subscriptions = res.data;
 
     const results = [];
