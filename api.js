@@ -1,7 +1,7 @@
 import axios from 'axios';
 //import { backendUrl } from './config';
 const backendUrl = "localhost:3000";
-const socket = new WebSocket(`ws://${backendUrl}`);
+export const socket = new WebSocket(`ws://${backendUrl}`);
 
 export async function fetchPrices() {
     // Import the subscription array from backend
@@ -27,7 +27,3 @@ export async function fetchPrices() {
     return results;
 };
 
-socket.onmessage = (event) => {
-    const { symbol, price } = JSON.parse(event.data);
-    console.log(`${symbol}: ${price}`);
-};
