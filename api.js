@@ -27,3 +27,25 @@ export async function fetchPrices() {
     return results;
 };
 
+export async function getActiveSubs() {
+    const res = await axios.get("http://localhost:3000/subscriptions");
+    return res.data;
+}
+
+export async function fetchSubscriptions() {
+    const res = await axios.get(`http://localhost:3000/allSubscriptions`);
+    const allSubscriptions = res.data;
+    return allSubscriptions;
+}
+
+export async function postSymbol(symbol) {
+    axios.post("http://localhost:3000/subscriptions", { symbol })
+        .then(res => console.log("Added:", res.data))
+        .catch(err => console.error(err))
+}
+
+export async function deleteSymbol(symbol) {
+    axios.delete(`http://localhost:3000/subscriptions/${symbol}`)
+        .then(res => console.log("Deleted:", res.data))
+        .catch(err => console.error(err));
+}

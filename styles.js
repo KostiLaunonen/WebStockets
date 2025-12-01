@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
     backgroundColor: '#2d3645',
-    zIndex: 10,
+    zIndex: 2,
   },
   sideBarHeader: {
     alignItems: 'center',
@@ -100,5 +100,44 @@ export const styles = StyleSheet.create({
   sideBarItem: {
     flexDirection: 'row',
      paddingLeft: 45,
+  },
+  globalDarken: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'black',
+    opacity: 0.5,
+    zIndex: 5,
+  },
+  stockWindow: {
+    minWidth: '60%',
+    minHeight: '50%',
+    marginTop: 20,
+    padding: 20,
+    backgroundColor: '#2d3645',
+    borderRadius: 10,
+    zIndex: 10,
+  },
+  stockWindowHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  stockWindowItem: {
+    flexDirection: 'row',
+    minWidth: 500,
+    minHeight: 60,
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    padding: 10,
+    margin: 10,
+  },
+  smallText: {
+    fontSize: 12,
+    color: '#ffffff33',
   }
 });
