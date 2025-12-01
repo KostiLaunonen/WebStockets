@@ -1,5 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
+const cors = require('cors')
 const API_KEY = process.env.API_KEY;
 const PORT = process.env.PORT;
 
@@ -8,8 +9,11 @@ const http = require('http');
 const WebSocket = require('ws');
 const express = require('express');
 const app = express();
+app.use(cors());
+app.use(express.json());
 
 const subscriptions = new Set(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'BINANCE:BTCUSDT']);
+const allSubscriptions = new Set(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'BINANCE:BTCUSDT']);
 
 // .. like this
 const server = http.createServer(app);
@@ -45,6 +49,10 @@ app.get('/subscriptions', (req, res) => {
     res.json([...subscriptions]);
 })
 
+app.get('/allSubscriptions', (req, res) => {
+    res.json([...allSubscriptions]);
+})
+
 // Fetches the quote from Finnhub, which include stock data like prices etc.
 app.get('/quote', async (req, res) => {
     const symbol = req.query.symbol;
@@ -58,6 +66,22 @@ app.get('/quote', async (req, res) => {
 
     //console.log(response.data);
     res.json(response.data);
+})
+
+// Add a symbol to the sub list
+app.post('/subscriptions', (req, res) => {
+    const { symbol } = req.body;
+    subscriptions.add(symbol);
+    socket.send(JSON.stringify({ type: 'subscribe', symbol }));
+    res.status(201).json({ message: 'Symbol added', symbol });
+});
+
+// Delete a symbol from the sub list
+app.delete('/subscriptions/:symbol', (req, res) => {
+    const { symbol } = req.params;
+    subscriptions.delete(symbol)
+    socket.send(JSON.stringify({ type: 'unsubscribe', symbol }));
+    res.json({ message: 'symbol removed', symbol })
 })
 
 server.listen(PORT, () => {
