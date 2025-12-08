@@ -1,13 +1,14 @@
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons, ionicons } from '@expo/vector-icons'
 import { useEffect, useState, useRef } from 'react';
-import { fetchPrices, socket, postSymbol, deleteSymbol, fetchSubscriptions, getActiveSubs } from './api';
+import { fetchPrices, socket, postSymbol, deleteSymbol, fetchSubscriptions, getActiveSubs, getQuote } from './api';
 import { styles } from './styles';
 
 export default function App() {
   const [prices, setPrices] = useState([]);
   const [allSubscriptions, setAllSubscriptions] = useState([]);
   const [selectedStock, setSelectedStock] = useState(null);
+  const [quote, setQuote] = useState(null);
   const [sideBarVisible, setSideBarVisible] = useState(false);
   const [toggleStocks, setToggleStocks] = useState(false);
   const [symbolState, setSymbolState] = useState({});
@@ -88,6 +89,15 @@ export default function App() {
     loadAll();
   }, []);
 
+  useEffect(() => {
+    async function fetchQuote() {
+      if (!selectedStock) return;
+      const res = await getQuote(selectedStock.symbol)
+      setQuote(res);
+    }
+    fetchQuote();
+  }, [selectedStock])
+
   return (
     <View style={styles.container}>
 
@@ -145,7 +155,7 @@ export default function App() {
               if (selectedStock && selectedStock.symbol === symbol) {
                 setSelectedStock(null);
               } else {
-                setSelectedStock({ symbol, price })
+                setSelectedStock({ symbol })
               }
             }}>
 
@@ -154,22 +164,33 @@ export default function App() {
         ))}
       </View>
 
-      {
-        selectedStock && (
-          <Animated.View
-            style={[
-              styles.detailsBox,
-              {
-                transform: [{ translateY: slideAnim }],
-                opacity: selectedStock ? 1 : 0,
-              }
-            ]}>
-            <Text style={styles.detailsTitle}>{selectedStock.symbol} - Analytics</Text>
-            <Text style={styles.baseText}>Price: {selectedStock.price}</Text>
-            <Text style={styles.baseText}>Work in progress!</Text>
-          </Animated.View>
-        )
-      }
+      {selectedStock && (
+        <Animated.View
+          style={[
+            styles.detailsBox,
+            {
+              transform: [{ translateY: slideAnim }],
+              opacity: selectedStock ? 1 : 0,
+            }
+          ]}>
+          <Text style={styles.detailsTitle}>{selectedStock.symbol} - Analytics</Text>
+
+          {quote ? (
+            <>
+            <Text style={styles.baseText}>Current price: {quote.c}</Text>
+            <Text style={styles.baseText}>Change: {quote.d}</Text>
+            <Text style={styles.baseText}>Percent change: {quote.dp}</Text>
+            <Text style={styles.baseText}>High price of the day: {quote.h}</Text>
+            <Text style={styles.baseText}>Lowest price of the day: {quote.l}</Text>
+            <Text style={styles.baseText}>Previous close price: {quote.pc}</Text>
+            </>
+
+          ) : (
+            <Text style={styles.baseText}>Loading…</Text>
+          )}
+        </Animated.View>
+      )}
+
 
       {
         toggleStocks && (

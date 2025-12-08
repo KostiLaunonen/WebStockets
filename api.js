@@ -32,6 +32,13 @@ export async function getActiveSubs() {
     return res.data;
 }
 
+export async function getQuote(symbol) {
+    const res = await axios.get(`http://localhost:3000/quote`, {
+        params: { symbol }
+    })
+    return res.data;
+}
+
 export async function fetchSubscriptions() {
     const res = await axios.get(`http://localhost:3000/allSubscriptions`);
     const allSubscriptions = res.data;
