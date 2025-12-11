@@ -1,9 +1,17 @@
 import { StyleSheet } from "react-native";
 
+export const colors = {
+  default: '#1b2029',
+  defaultHighlight: '#2d3645',
+  blue: '#16186dff',
+  blueHighlight: '#3423d1ff',
+  green: '#1b4d17ff',
+  greenHighlight: '#23ad17ff'
+};
+
 export const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    backgroundColor: '#1b2029',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -24,7 +32,6 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     padding: 2,
     margin: 10,
-    backgroundColor: '#2d3645'
   },
   priceText: {
     fontSize: 20,
@@ -52,7 +59,6 @@ export const styles = StyleSheet.create({
     minHeight: '50%',
     marginTop: 20,
     padding: 20,
-    backgroundColor: '#2d3645',
     borderRadius: 10,
     color: 'white',
   },
@@ -75,7 +81,6 @@ export const styles = StyleSheet.create({
     width: '15%',
     paddingRight: 10,
     paddingTop: 10,
-    backgroundColor: '#2d3645',
     zIndex: 2,
   },
   sideBarHeader: {
@@ -112,11 +117,12 @@ export const styles = StyleSheet.create({
     zIndex: 5,
   },
   stockWindow: {
+    position: 'absolute',
+    top: 215,
     minWidth: '60%',
     minHeight: '50%',
     marginTop: 20,
     padding: 20,
-    backgroundColor: '#2d3645',
     borderRadius: 10,
     zIndex: 10,
   },
@@ -139,5 +145,16 @@ export const styles = StyleSheet.create({
   smallText: {
     fontSize: 12,
     color: '#ffffff33',
-  }
+  },
+    themeBox: {
+    minWidth: 50,
+    minHeight: 50,
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'white',
+    borderRadius: 100,
+    alignSelf: 'flex-start',
+    padding: 2,
+    margin: 10,
+    },
 });

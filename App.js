@@ -1,8 +1,8 @@
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Ionicons, ionicons } from '@expo/vector-icons'
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
 import { useEffect, useState, useRef } from 'react';
 import { fetchPrices, socket, postSymbol, deleteSymbol, fetchSubscriptions, getActiveSubs, getQuote } from './api';
-import { styles } from './styles';
+import { styles, colors } from './styles';
 
 export default function App() {
   const [prices, setPrices] = useState([]);
@@ -12,6 +12,9 @@ export default function App() {
   const [sideBarVisible, setSideBarVisible] = useState(false);
   const [toggleStocks, setToggleStocks] = useState(false);
   const [symbolState, setSymbolState] = useState({});
+  const [settingsBox, setSettingsBox] = useState(false);
+  const [dynamicColor, setDynamicColor] = useState(colors.default);
+  const [dynamicHighlight, setDynamicHighlight] = useState(colors.defaultHighlight);
 
   // Dynamic state toggling for each subscribed symbol
   const toggleSymbol = (symbol) => {
@@ -99,7 +102,7 @@ export default function App() {
   }, [selectedStock])
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: dynamicColor }]}>
 
       <View style={{ alignItems: 'flex-start', width: '100%' }}>
         <TouchableOpacity
@@ -111,7 +114,7 @@ export default function App() {
       </View>
 
       {sideBarVisible && (
-        <View style={styles.sideBar}>
+        <View style={[styles.sideBar, { backgroundColor: dynamicHighlight }]}>
           <View style={styles.sideBarHeader}>
             <Text style={styles.baseText}>
               Sidebar
@@ -130,7 +133,8 @@ export default function App() {
             </TouchableOpacity>
 
             <View style={styles.sideBarDivider} />
-            <TouchableOpacity style={styles.sideBarItem}>
+            <TouchableOpacity style={styles.sideBarItem}
+              onPress={() => setSettingsBox(!settingsBox)}>
               <Ionicons name="settings-outline" size={26} color="white" />
               <Text style={styles.baseText}> Settings </Text>
             </TouchableOpacity>
@@ -148,7 +152,7 @@ export default function App() {
         {prices.map(({ symbol, price }) => (
           <TouchableOpacity
             key={symbol}
-            style={styles.priceBox}
+            style={[styles.priceBox, { backgroundColor: dynamicHighlight }]}
 
             // Close or open the details box for given symbol if it's the same or not
             onPress={() => {
@@ -164,39 +168,11 @@ export default function App() {
         ))}
       </View>
 
-      {selectedStock && (
-        <Animated.View
-          style={[
-            styles.detailsBox,
-            {
-              transform: [{ translateY: slideAnim }],
-              opacity: selectedStock ? 1 : 0,
-            }
-          ]}>
-          <Text style={styles.detailsTitle}>{selectedStock.symbol} - Analytics</Text>
-
-          {quote ? (
-            <>
-            <Text style={styles.baseText}>Current price: {quote.c}</Text>
-            <Text style={styles.baseText}>Change: {quote.d}</Text>
-            <Text style={styles.baseText}>Percent change: {quote.dp}</Text>
-            <Text style={styles.baseText}>High price of the day: {quote.h}</Text>
-            <Text style={styles.baseText}>Lowest price of the day: {quote.l}</Text>
-            <Text style={styles.baseText}>Previous close price: {quote.pc}</Text>
-            </>
-
-          ) : (
-            <Text style={styles.baseText}>Loading…</Text>
-          )}
-        </Animated.View>
-      )}
-
-
       {
         toggleStocks && (
           <>
             <View style={styles.globalDarken} />
-            <View style={styles.stockWindow}>
+            <View style={[styles.stockWindow, { backgroundColor: dynamicHighlight }]}>
               <View style={styles.stockWindowHeader}>
                 <Text style={styles.baseText}>Toggle Stocks</Text>
                 <TouchableOpacity onPress={() => setToggleStocks(false)}>
@@ -222,6 +198,117 @@ export default function App() {
                 ))}
               </View>
             </View>
+          </>
+        )
+      }
+
+
+      {selectedStock && (
+        <Animated.View
+          style={[
+            styles.detailsBox,
+            {
+              transform: [{ translateY: slideAnim }],
+              opacity: selectedStock ? 1 : 0,
+              backgroundColor: dynamicHighlight,
+            }
+          ]}>
+          <Text style={styles.detailsTitle}>{selectedStock.symbol} - Analytics</Text>
+
+          {quote ? (
+            <View style={{ borderWidth: 2, borderRadius: 6, borderColor: 'white' }}>
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                Current price: <Text style={{ color: quote.d >= 0 ? 'limegreen' : '#e44d4d' }}>
+                  {quote.c}
+                </Text>
+              </Text>
+
+              <View style={[styles.divider, { marginLeft: 10 }]} />
+
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                Change: <Text style={{ color: quote.d >= 0 ? 'limegreen' : '#e44d4d' }}>
+                  {quote.d}$</Text>
+              </Text>
+
+              <View style={[styles.divider, { marginLeft: 10 }]} />
+
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                Percent change: <Text style={{ color: quote.d >= 0 ? 'limegreen' : '#e44d4d' }}>
+                  {quote.dp}%</Text>
+              </Text>
+
+              <View style={[styles.divider, { marginLeft: 10 }]} />
+
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                High price of the day: <Text>
+                  {quote.h}$</Text>
+              </Text>
+
+              <View style={[styles.divider, { marginLeft: 10 }]} />
+
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                Lowest price of the day: <Text>
+                  {quote.l}$</Text>
+              </Text>
+
+              <View style={[styles.divider, { marginLeft: 10 }]} />
+
+              <Text style={[styles.baseText, { padding: 10, fontStyle: 'italic' }]}>
+                Previous close price: <Text>
+                  {quote.pc}$</Text>
+              </Text>
+            </View>
+
+          ) : (
+            <Text style={styles.baseText}>Loading…</Text>
+          )}
+        </Animated.View>
+      )}
+
+      {
+        settingsBox && (
+          <>
+            <View style={styles.globalDarken} />
+            <View style={[styles.stockWindow, { backgroundColor: dynamicHighlight }]}>
+              <View style={styles.stockWindowHeader}>
+                <Text style={styles.baseText}>Settings</Text>
+                <TouchableOpacity onPress={() => setSettingsBox(false)}>
+                  <Ionicons name="close" size={26} color="white" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.divider} />
+
+              <Text style={[styles.baseText]}>Choose your theme!</Text>
+              <View style={{ flexDirection: 'row', padding: 2 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setDynamicColor(colors.default);
+                    setDynamicHighlight(colors.defaultHighlight);
+                  }}>
+                  <View style={[styles.themeBox, { backgroundColor: colors.default }]} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    setDynamicColor(colors.blue);
+                    setDynamicHighlight(colors.blueHighlight);
+                  }}>
+                  <View style={[styles.themeBox, { backgroundColor: colors.blue }]} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    setDynamicColor(colors.green);
+                    setDynamicHighlight(colors.greenHighlight);
+                  }}>
+                  <View style={[styles.themeBox, { backgroundColor: colors.green }]} />
+                </TouchableOpacity>
+
+              </View>
+            </View>
+
+
           </>
         )
       }
