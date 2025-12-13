@@ -5,7 +5,7 @@ export const socket = new WebSocket(`ws://${backendUrl}`);
 
 export async function fetchPrices() {
     // Import the subscription array from backend
-    const res = await axios.get(`http://localhost:3000/subscriptions`);
+    const res = await axios.get(`https://webstockets.onrender.com/subscriptions`);
     const subscriptions = res.data;
 
     const results = [];
@@ -13,7 +13,7 @@ export async function fetchPrices() {
     // Iterate over the array and get prices for each stock
     for (const symbol of subscriptions) {
         try {
-            const response = await axios.get(`http://localhost:3000/quote/`, {
+            const response = await axios.get(`https://webstockets.onrender.com/quote/`, {
                 params: { symbol }
             });
             const price = response.data.c;
@@ -28,31 +28,31 @@ export async function fetchPrices() {
 };
 
 export async function getActiveSubs() {
-    const res = await axios.get("http://localhost:3000/subscriptions");
+    const res = await axios.get("https://webstockets.onrender.com/subscriptions");
     return res.data;
 }
 
 export async function getQuote(symbol) {
-    const res = await axios.get(`http://localhost:3000/quote`, {
+    const res = await axios.get(`https://webstockets.onrender.com/quote`, {
         params: { symbol }
     })
     return res.data;
 }
 
 export async function fetchSubscriptions() {
-    const res = await axios.get(`http://localhost:3000/allSubscriptions`);
+    const res = await axios.get(`https://webstockets.onrender.com/allSubscriptions`);
     const allSubscriptions = res.data;
     return allSubscriptions;
 }
 
 export async function postSymbol(symbol) {
-    axios.post("http://localhost:3000/subscriptions", { symbol })
+    axios.post("https://webstockets.onrender.com/subscriptions", { symbol })
         .then(res => console.log("Added:", res.data))
         .catch(err => console.error(err))
 }
 
 export async function deleteSymbol(symbol) {
-    axios.delete(`http://localhost:3000/subscriptions/${symbol}`)
+    axios.delete(`https://webstockets.onrender.com/subscriptions/${symbol}`)
         .then(res => console.log("Deleted:", res.data))
         .catch(err => console.error(err));
 }
