@@ -1,7 +1,7 @@
 import axios from 'axios';
 //import { backendUrl } from './config';
-const backendUrl = "https://webstockets.onrender.com/";
-export const socket = new WebSocket(`ws://${backendUrl}`);
+const backendUrl = "webstockets.onrender.com/";
+export const socket = new WebSocket(`wss://${backendUrl}`);
 
 export async function fetchPrices() {
     // Import the subscription array from backend
