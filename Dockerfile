@@ -1,16 +1,14 @@
-# --- Frontend build stage ---
 FROM node:22 AS build-frontend
 WORKDIR /app/frontend
 
-# Kopioidaan frontendin package.json ja lock
 COPY frontend/package*.json ./
+RUN npm install -g npm@latest
+RUN rm -f package-lock.json
 RUN npm install
 
-# Kopioidaan loput frontendin lähdekoodit
 COPY frontend .
-
-# Rakennetaan frontend (React/Vite/Next tms.)
 RUN npm run build
+
 
 # --- Backend stage ---
 FROM node:22 AS backend
