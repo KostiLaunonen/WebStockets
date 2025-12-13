@@ -1,8 +1,9 @@
 require('dotenv').config();
 const axios = require('axios');
+const path = require('path');
 const cors = require('cors')
 const API_KEY = process.env.API_KEY;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 // Using http to create a single server for both express and websockets..
 const http = require('http');
@@ -11,6 +12,14 @@ const express = require('express');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Palvellaan frontendin buildatut tiedostot
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Jos käytät Reactia/Viteä, ohjaa kaikki tuntemattomat reitit index.html:ään
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 const subscriptions = new Set(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'BINANCE:BTCUSDT']);
 const allSubscriptions = new Set(['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'BINANCE:BTCUSDT']);
