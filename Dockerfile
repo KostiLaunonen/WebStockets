@@ -2,7 +2,7 @@ FROM node:22 AS build-frontend
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN rm -f package-lock-json
-RUN npm install
+RUN npm install --no-optional
 COPY frontend .
 RUN npm run build
 
