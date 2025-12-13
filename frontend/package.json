@@ -381,7 +381,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "expo start"
+    "start": "expo start",
+    "build": "react-scripts build"
   },
   "repository": {
     "type": "git",
