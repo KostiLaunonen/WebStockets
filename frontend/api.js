@@ -1,6 +1,6 @@
 import axios from 'axios';
 //import { backendUrl } from './config';
-const backendUrl = "localhost:3000";
+const backendUrl = "https://webstockets.onrender.com/";
 export const socket = new WebSocket(`ws://${backendUrl}`);
 
 export async function fetchPrices() {
