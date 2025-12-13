@@ -4,7 +4,6 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install -g npm@latest
 RUN rm -f package-lock.json
-RUN npm install
 
 COPY frontend .
 RUN npm run build
