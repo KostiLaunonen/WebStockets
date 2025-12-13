@@ -11,8 +11,6 @@ COPY backend/package*.json ./
 RUN npm install
 COPY backend .
 
-COPY --from=build-frontend /app/frontend/build ./public
-
 ENV PORT=$PORT
 EXPOSE $PORT
 
