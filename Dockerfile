@@ -3,7 +3,6 @@ WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install -g npm@latest
 COPY frontend .
-RUN npm run build
 
 FROM node:18
 WORKDIR /app/backend
